@@ -1,0 +1,11 @@
+{
+  "name": "@app/analytics-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "@app/common": "*"
+  }
+}

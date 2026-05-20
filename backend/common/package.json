@@ -1,0 +1,11 @@
+{
+  "name": "@app/common",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "kafkajs": "^2.2.4",
+    "ioredis": "^5.3.2",
+    "mongodb": "^6.5.0",
+    "winston": "^3.11.0"
+  }
+}
