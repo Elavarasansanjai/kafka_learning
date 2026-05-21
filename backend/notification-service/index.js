@@ -68,7 +68,12 @@ app.get('/api/analytics', async (req, res) => {
     const keys = await redisClient.keys('analytics:*');
     const data = {};
     for (const key of keys) {
-      data[key] = await redisClient.get(key);
+      const type = await redisClient.type(key);
+      if (type === 'set') {
+        data[key] = await redisClient.smembers(key);
+      } else {
+        data[key] = await redisClient.get(key);
+      }
     }
     res.json(data);
   } catch (error) {
@@ -81,11 +86,12 @@ const setupEventLogger = async () => {
   await mongoClient.connectMongo();
   await admin.createTopics(); // Ensure topics are created before starting
 
-  await consumer.createConsumer('notification-group', TOPICS, async ({ topic, partition, key, value, offset }) => {
+  const messageHandler = async ({ topic, partition, key, value, offset, groupId }) => {
     const db = mongoClient.getDb();
 
     // Store event in mongo
     await db.collection('events').insertOne({
+      groupId,
       topic,
       partition,
       key,
@@ -94,8 +100,10 @@ const setupEventLogger = async () => {
       timestamp: new Date()
     });
 
-    console.log(`[EVENT LOG] ${topic} | Partition: ${partition} | Offset: ${offset}`);
-  });
+    console.log(`[EVENT LOG] ${groupId} | ${topic} | Partition: ${partition} | Offset: ${offset}`);
+  };
+
+  await consumer.createConsumer('notification-group', TOPICS, messageHandler);
 };
 
 app.listen(PORT, async () => {

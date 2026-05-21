@@ -32,7 +32,7 @@ const createConsumer = async (groupId, topics, messageHandler) => {
         const value = message.value ? JSON.parse(message.value.toString()) : null;
         const offset = message.offset;
 
-        await messageHandler({ topic, partition, key, value, offset, heartbeat });
+        await messageHandler({ topic, partition, key, value, offset, heartbeat, groupId });
       } catch (err) {
         console.error(`Error processing message in ${groupId}`, err);
         // Implement manual retry or DLQ logic here depending on the handler

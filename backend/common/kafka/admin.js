@@ -47,6 +47,7 @@ const getClusterInfo = async () => {
   await admin.connect();
   const cluster = await admin.describeCluster();
   const topics = await admin.fetchTopicMetadata();
+  console.log(cluster, topics, "====== topics and cluster")
   await admin.disconnect();
   return { cluster, topics };
 };

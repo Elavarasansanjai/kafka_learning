@@ -1,0 +1,15 @@
+{
+  "name": "kafka_learning",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "backend/*",
+    "frontend"
+  ],
+  "scripts": {
+    "start": "concurrently \"npm run dev -w @app/producer-service\" \"npm run dev -w @app/matching-service\" \"npm run dev -w @app/payment-service\" \"npm run dev -w @app/analytics-service\" \"npm run dev -w @app/notification-service\" \"npm run dev -w frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

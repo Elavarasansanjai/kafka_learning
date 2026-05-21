@@ -8,7 +8,11 @@ function ConsumerGroups() {
     const poll = async () => {
       try {
         const data = await fetchConsumers();
-        setGroups(data);
+        if (Array.isArray(data)) {
+          setGroups(data);
+        } else {
+          console.error("API returned non-array data:", data);
+        }
       } catch (error) {
         console.error(error);
       }

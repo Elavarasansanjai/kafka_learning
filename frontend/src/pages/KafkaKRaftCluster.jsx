@@ -8,7 +8,11 @@ function KafkaKRaftCluster() {
     const poll = async () => {
       try {
         const data = await fetchCluster();
-        setCluster(data);
+        if (data && data.brokers) {
+          setCluster(data);
+        } else {
+          console.error("API returned invalid cluster data:", data);
+        }
       } catch (error) {
         console.error(error);
       }

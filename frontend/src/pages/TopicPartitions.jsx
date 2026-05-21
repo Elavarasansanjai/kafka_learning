@@ -8,7 +8,11 @@ function TopicPartitions() {
     const poll = async () => {
       try {
         const data = await fetchPartitions();
-        setTopics(data);
+        if (Array.isArray(data)) {
+          setTopics(data);
+        } else {
+          console.error("API returned non-array data:", data);
+        }
       } catch (error) {
         console.error(error);
       }
