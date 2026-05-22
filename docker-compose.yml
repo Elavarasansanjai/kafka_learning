@@ -65,7 +65,19 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    ports:
+      - "8080:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local-kraft-cluster
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-1:19092,kafka-2:19094,kafka-3:19096
+      - DYNAMIC_CONFIG_ENABLED=true
   app:
     build: .
     depends_on:
