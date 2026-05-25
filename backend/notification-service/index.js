@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { consumer, admin, mongoClient, redisClient } = require('@app/common');
+const { consumer, admin, mongoClient, redisClient, zkConsumer, zkAdmin } = require('@app/common');
 
 const app = express();
 app.use(cors());
@@ -19,6 +19,23 @@ app.get('/api/events', async (req, res) => {
   const db = mongoClient.getDb();
   const events = await db.collection('events').find().sort({ timestamp: -1 }).limit(100).toArray();
   res.json(events);
+});
+
+// Zookeeper Events Endpoint
+app.get('/api/zk-events', async (req, res) => {
+  const db = mongoClient.getDb();
+  const events = await db.collection('zk_events').find().sort({ timestamp: -1 }).limit(100).toArray();
+  res.json(events);
+});
+
+// Endpoint to list ZK topics
+app.get('/api/zk-topics', async (req, res) => {
+  try {
+    const topics = await zkAdmin.listZkTopics();
+    res.json(topics);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.get('/api/partitions', async (req, res) => {
@@ -106,7 +123,35 @@ const setupEventLogger = async () => {
   await consumer.createConsumer('notification-group', TOPICS, messageHandler);
 };
 
+// Setup Zookeeper Consumer
+const setupZkLogger = async () => {
+  const zkConsumerInstance = zkConsumer.createZkConsumer('zk-ecommerce-group');
+  // ensure ecommerce-orders topic exists
+  try {
+    await zkAdmin.createZkTopic('ecommerce-orders', 3, 1);
+  } catch (e) {
+    console.log('[ZK] Topic may already exist or error creating:', e.message);
+  }
+
+  const zkMessageHandler = async ({ topic, partition, message }) => {
+    const db = mongoClient.getDb();
+
+    await db.collection('zk_events').insertOne({
+      groupId: 'zk-ecommerce-group',
+      topic,
+      partition,
+      key: message.key ? message.key.toString() : null,
+      value: message.value ? message.value.toString() : null,
+      offset: message.offset,
+      timestamp: new Date()
+    });
+  };
+
+  await zkConsumer.subscribeAndConsumeZk(zkConsumerInstance, 'ecommerce-orders', zkMessageHandler);
+};
+
 app.listen(PORT, async () => {
   console.log(`Notification service running on port ${PORT}`);
   await setupEventLogger();
+  await setupZkLogger();
 });

@@ -1,0 +1,212 @@
+.zk-container {
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+  color: #e0e0e0;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a24 100%);
+  min-height: calc(100vh - 40px);
+  border-radius: 12px;
+}
+
+.zk-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.zk-header h1 {
+  font-size: 2.5rem;
+  background: -webkit-linear-gradient(45deg, #ff6b6b, #feca57);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
+}
+
+.zk-header p {
+  color: #a0a0a0;
+  font-size: 1.1rem;
+}
+
+.zk-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.zk-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.zk-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.zk-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+  border-bottom: 2px solid rgba(255, 107, 107, 0.3);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #bbb;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  color: #fff;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #ff6b6b;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+}
+
+.zk-btn {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ff6b6b, #ee5253);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(238, 82, 83, 0.4);
+}
+
+.zk-btn:hover {
+  background: linear-gradient(90deg, #ee5253, #ff6b6b);
+  box-shadow: 0 6px 20px rgba(238, 82, 83, 0.6);
+  transform: translateY(-2px);
+}
+
+.zk-status-msg {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(46, 213, 115, 0.1);
+  border-left: 4px solid #2ed573;
+  color: #2ed573;
+  border-radius: 4px;
+  animation: fadeIn 0.3s ease;
+}
+
+.topics-panel .subtitle {
+  color: #888;
+  margin-bottom: 1rem;
+}
+
+.zk-topics-list {
+  list-style: none;
+  padding: 0;
+}
+
+.topic-item {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-family: monospace;
+  font-size: 1rem;
+  transition: background 0.2s ease;
+}
+
+.topic-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.topic-icon {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.zk-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.zk-table th {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.zk-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #dcdde1;
+}
+
+.zk-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.badge {
+  background: rgba(254, 202, 87, 0.15);
+  color: #feca57;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+.msg-cell code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  color: #48dbfb;
+  font-size: 0.9rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}

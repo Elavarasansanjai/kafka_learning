@@ -6,6 +6,7 @@ import ConsumerGroups from './pages/ConsumerGroups';
 import LiveEventLogs from './pages/LiveEventLogs';
 import RedisAnalytics from './pages/RedisAnalytics';
 import KafkaKRaftCluster from './pages/KafkaKRaftCluster';
+import ZookeeperEcommercePlayground from './pages/ZookeeperEcommercePlayground';
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
           <NavLink to="/logs" className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>Live Event Logs</NavLink>
           <NavLink to="/analytics" className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>Redis Analytics</NavLink>
           <NavLink to="/cluster" className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>Kafka KRaft Cluster</NavLink>
+          <h3 style={{color: '#aaa', marginLeft: '1rem', marginTop: '1rem', fontSize: '0.9rem'}}>Zookeeper</h3>
+          <NavLink to="/zk-ecommerce" className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>E-Commerce (ZK)</NavLink>
         </nav>
         
         <main className="main-content">
@@ -29,6 +32,7 @@ function App() {
             <Route path="/logs" element={<LiveEventLogs />} />
             <Route path="/analytics" element={<RedisAnalytics />} />
             <Route path="/cluster" element={<KafkaKRaftCluster />} />
+            <Route path="/zk-ecommerce" element={<ZookeeperEcommercePlayground />} />
           </Routes>
         </main>
       </div>

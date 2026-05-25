@@ -25,7 +25,7 @@ const createTopics = async () => {
       .map(t => ({
         topic: t,
         numPartitions: topicConfigs[t],
-        replicationFactor: 3
+        replicationFactor: 1
       }));
     console.log(topicsToCreate, "====== topic to create ====")
     if (topicsToCreate.length > 0) {
