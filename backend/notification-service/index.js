@@ -98,6 +98,68 @@ app.get('/api/analytics', async (req, res) => {
   }
 });
 
+app.post('/api/analytics/redis-ops', async (req, res) => {
+  try {
+    const demoKey = `demo:key:${Date.now()}`;
+    const demoValue = 'demo-value';
+    const channel = 'demo-channel';
+    const userId = req.body.userId || 'user123';
+    
+    // 1. set(key, value) -> Store value
+    await redisClient.set(demoKey, demoValue);
+    console.log(`[REDIS OP] SET: Stored a new value in key '${demoKey}' - Purpose: Basic key-value data storage.`);
+    
+    // 2. get(key) -> Get value
+    const retrievedValue = await redisClient.get(demoKey);
+    console.log(`[REDIS OP] GET: Retrieved value '${retrievedValue}' from key '${demoKey}' - Purpose: Fetching simple data by its unique key.`);
+    
+    // 3. expire(key, seconds) -> Set expiry
+    await redisClient.expire(demoKey, 3600);
+    console.log(`[REDIS OP] EXPIRE: Set a 1-hour expiration on key '${demoKey}' - Purpose: Auto-cleanup of stale or temporary data.`);
+    
+    // 4. ttl(key) -> Remaining time
+    const ttlValue = await redisClient.ttl(demoKey);
+    console.log(`[REDIS OP] TTL: Remaining time for key '${demoKey}' is ${ttlValue} seconds - Purpose: Checking how much longer a key will live.`);
+    
+    // 5. incr(key) -> Increment counter
+    const counter = await redisClient.incr(`demo:counter:${userId}`);
+    console.log(`[REDIS OP] INCR: Incremented counter to ${counter} - Purpose: High-performance atomic counting for metrics/rate limits.`);
+    
+    // 6. hset(key, object) -> Store object
+    await redisClient.hset(`demo:user:${userId}`, 'lastAction', 'redis-ops', 'count', counter);
+    console.log(`[REDIS OP] HSET: Stored hash object for user '${userId}' - Purpose: Storing structured data/objects efficiently without serializing full JSON.`);
+    
+    // 7. lpush(key, value) -> Add queue item
+    await redisClient.lpush(`demo:queue:${userId}`, `action-${counter}`);
+    console.log(`[REDIS OP] LPUSH: Pushed item to queue '${userId}' - Purpose: Adding elements to a list, often used for task queues or recent activity feeds.`);
+    
+    // 8. publish(channel, message) -> Real-time messaging
+    await redisClient.publish(channel, JSON.stringify({ userId, event: 'redis-ops-executed' }));
+    console.log(`[REDIS OP] PUBLISH: Sent message to channel '${channel}' - Purpose: Broadcasting events in real-time for Pub/Sub messaging architectures.`);
+    
+    // 9. zadd(key, score, member) -> Leaderboard
+    await redisClient.zadd('demo:leaderboard', counter, userId);
+    console.log(`[REDIS OP] ZADD: Added user '${userId}' with score ${counter} to leaderboard - Purpose: Maintaining ordered sets (like leaderboards or priority queues) sorted by a score.`);
+    
+    // 10. del(key) -> Delete key
+    await redisClient.del(demoKey);
+    console.log(`[REDIS OP] DEL: Deleted key '${demoKey}' - Purpose: Manual cleanup and removal of cached data.`);
+
+    res.json({
+      success: true,
+      message: 'Successfully executed all requested Redis operations.',
+      results: {
+        retrievedValue,
+        ttlValue,
+        counter
+      }
+    });
+  } catch (error) {
+    console.error('Redis ops error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Setup Consumer to log all events to MongoDB
 const setupEventLogger = async () => {
   await mongoClient.connectMongo();
